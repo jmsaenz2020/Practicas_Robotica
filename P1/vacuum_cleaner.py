@@ -6,8 +6,6 @@ import numpy as np
 pi = math.pi
 v = 1
 w = v*pi
-time_start = time.time()
-start = time_start
 
 def bumped(w):
     bumper = HAL.getBumperData().bumper
@@ -15,18 +13,18 @@ def bumped(w):
     if crash:
         if bumper == 0:
             print("izquierda")
-            angle = random.uniform(4.08, 4.71)/pi
+            angle = random.uniform(-0.35, -0.25)
             if w < 0:
                 w *= -1
         elif bumper == 2:
             print("derecha")
-            angle = random.uniform(1.57, 2.2)/pi
+            angle = random.uniform(0.25, 0.35)
             if w > 0:
                 w *= -1
         else:
             print("frente")
-            angle = random.uniform(2.83, 3.46)/pi
-        HAL.setV(-2)
+            angle = random.uniform(0.45, 0.55)
+        HAL.setV(-5)
         HAL.setW(0)
         rospy.sleep(1)
         HAL.setV(0)
@@ -35,12 +33,6 @@ def bumped(w):
     return crash, w
 
 while True:
-    end = time.time()
-    if (end - start) > 300:
-        print("FINISH")
-        HAL.setV(0)
-        HAL.setW(0)
-    else:
         HAL.setV(v)
         HAL.setW(w)
         bump, w = bumped(w)
@@ -53,3 +45,4 @@ while True:
                     v += 0.5
         else:
             v = 1
+
