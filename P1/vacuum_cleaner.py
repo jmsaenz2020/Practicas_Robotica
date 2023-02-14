@@ -6,6 +6,7 @@ import numpy as np
 pi = math.pi
 v = 1
 w = v*pi
+time_start = time.time()
 
 def bumped(w):
     bumper = HAL.getBumperData().bumper
@@ -33,16 +34,16 @@ def bumped(w):
     return crash, w
 
 while True:
-        HAL.setV(v)
-        HAL.setW(w)
-        bump, w = bumped(w)
-        if not bump:
-            print(v, w)
-            if (abs(w) >= 0.05):
-                time_current = time.time()
-                if (time_current - time_start) > (2*pi/abs(w)):
-                    time_start = time.time()
-                    v += 0.5
-        else:
-            v = 1
+    HAL.setV(v)
+    HAL.setW(w)
+    bump, w = bumped(w)
+    if not bump:
+        print(v, w)
+        if (abs(w) >= 0.05):
+            time_current = time.time()
+            if (time_current - time_start) > (2*pi/abs(w)):
+                time_start = time.time()
+                v += 0.5
+    else:
+        v = 1
 
