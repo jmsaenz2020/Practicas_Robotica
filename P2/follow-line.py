@@ -7,9 +7,9 @@ import numpy as np
 V = 1
 Vmax = 7
 W = 0
-K_P = 1.55
-K_D = 8.25
-K_I = 0
+K_P = 2
+K_D = 6
+K_I = 0.5
 e = math.e
 prev_error = 0
 sum_error = 0
@@ -53,7 +53,7 @@ def get_speed(V, W, reference, prev_error, sum_error, i):
     diff_y = center[1] - get_y
     error = diff_x/480
     i += 1
-    sum_error += error
+    sum_error -= error
     W = K_P*error + K_D*(error - prev_error) + K_I * sum_error/i
     V = Vmax/(abs(W) + 1)
     if V >= Vmax:
