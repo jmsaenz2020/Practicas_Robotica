@@ -5,10 +5,10 @@ import cv2
 import numpy as np
 
 V = 1
-Vmax = 10
+Vmax = 7
 W = 0
-K_P = 1
-K_D = 0.5
+K_P = 1.55
+K_D = 8.25
 K_I = 0
 e = math.e
 prev_error = 0
@@ -33,7 +33,7 @@ def filter_image(image):
     M = cv2.moments(max_contour) # Obtener centroide de imagen
     if M["m00"] != 0:
         center_x = int(M["m10"] / M["m00"])
-        center_y = int(M["m01"] / M["m00"]) - 100
+        center_y = int(M["m01"] / M["m00"])
         center = (center_x, center_y)
     else:
         center = (329, 399)
@@ -54,9 +54,8 @@ def get_speed(V, W, reference, prev_error, sum_error, i):
     error = diff_x/480
     i += 1
     sum_error += error
-    print(error)
     W = K_P*error + K_D*(error - prev_error) + K_I * sum_error/i
-    V = Vmax*pow(e, -1/150*abs(diff_x))
+    V = Vmax/(abs(W) + 1)
     if V >= Vmax:
         V = Vmax
     return V , W, error
@@ -64,11 +63,16 @@ def get_speed(V, W, reference, prev_error, sum_error, i):
 HAL.setV(0)
 HAL.setW(0)
 while True:
-    camera = HAL.getImage()
-    center = filter_image(camera)
-    V, W, prev_error = get_speed(V, W, center, prev_error, sum_error, i)
-    HAL.setV(V)
-    HAL.setW(W)
-    print(round(V*20, 0), "km/h")
-    print(round(W, 2), "rad/s")
+    try:
+        camera = HAL.getImage()
+        center = filter_image(camera)
+        V, W, prev_error = get_speed(V, W, center, prev_error, sum_error, i)
+        HAL.setV(V)
+        HAL.setW(W)
+        print(round(V*20, 0), "km/h")
+        print(round(W, 2), "rad/s")
+    except Exception as e:
+        print(e)
+        HAL.setV(0)
+        HAL.setW(0)
 
