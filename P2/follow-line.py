@@ -5,11 +5,11 @@ import cv2
 import numpy as np
 
 V = 1
-Vmax = 7
+Vmax = 5
 W = 0
-K_P = 2
-K_D = 6
-K_I = 0.5
+K_P = 9
+K_D = 11
+K_I = 7
 e = math.e
 prev_error = 0
 sum_error = 0
