@@ -12,3 +12,9 @@ K_P = 9
 K_D = 11
 K_I = 7
 
+Nurburgring
+
+K_P = 9.25
+K_D = 9
+K_I = 7.5
+
